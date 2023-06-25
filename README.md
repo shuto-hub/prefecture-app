@@ -1,10 +1,10 @@
-# Nuxt 3 Minimal Starter
+# 概要
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+都道府県別の総人口推移グラフを表示する SPA です
 
-## Setup
+## 環境構築
 
-Make sure to install the dependencies:
+ルートディレクトリで以下のコマンドを実行してください。
 
 ```bash
 # npm
@@ -17,9 +17,9 @@ pnpm install
 yarn install
 ```
 
-## Development Server
+## 開発環境での動作確認
 
-Start the development server on `http://localhost:3000`:
+ルートディレクトリで以下のコマンドを実行し、 `http://localhost:3000`から動作を確認できます:
 
 ```bash
 # npm
@@ -31,33 +31,3 @@ pnpm run dev
 # yarn
 yarn dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
