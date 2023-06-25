@@ -8,5 +8,5 @@ export default defineNuxtConfig({
     strict: true,
     typeCheck: false,
   },
-  css: ['@/assets/styles/reset.css', '@/assets/styles/main.scss'],
-})
+  css: ['@/assets/styles/reset.css'],
+});
