@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1>都道府県別の総人口推移グラフapp</h1>
-    <Prefecture />
-    <Chart />
+    <p>ここに都道府県を表示</p>
   </div>
 </template>
 <script lang="ts" setup></script>
