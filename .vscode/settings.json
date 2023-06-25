@@ -1,0 +1,9 @@
+{
+  "eslint.autoFixOnSave": true,
+  "eslint.options": { "configFile": "./.eslintrc.json" },
+  "eslint.validate": [
+    "javascript",
+    { "language": "typescript", "autoFix": true },
+    { "language": "vue", "autoFix": true }
+  ]
+}
