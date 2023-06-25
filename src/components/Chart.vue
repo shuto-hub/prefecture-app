@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-card">
     <apexchart
       width="100%"
       type="line"
@@ -330,4 +330,8 @@ const chartOptions = {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.chart-card {
+  margin-bottom: 24px;
+}
+</style>
