@@ -9,4 +9,9 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
   css: ['@/assets/styles/reset.css'],
+  runtimeConfig: {
+    public: {
+      key: '',
+    },
+  },
 });
