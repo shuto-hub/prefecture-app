@@ -1,10 +1,14 @@
 <template>
   <div>
-    <h1>都道府県別の総人口推移グラフapp</h1>
+    <h1 class="app-title">都道府県別総人口推移グラフ</h1>
     <Prefecture />
     <Chart />
   </div>
 </template>
 <script lang="ts" setup></script>
 
-<style scoped></style>
+<style scoped>
+.app-title {
+  text-align: center;
+}
+</style>

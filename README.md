@@ -4,7 +4,7 @@
 
 ## 環境構築
 
-ルートディレクトリで以下のコマンドを実行してください。
+1. ルートディレクトリで以下のコマンドを実行してください。
 
 ```bash
 # npm
@@ -15,6 +15,14 @@ pnpm install
 
 # yarn
 yarn install
+```
+
+2. https://opendata.resas-portal.go.jp/form.html で利用登録を行い、API キーを取得してください。
+
+3. 取得した API キーを使って、ルートディレクトリに`.env`ファイルを以下の内容で作成してください。
+
+```
+NUXT_PUBLIC_KEY=作成したAPIキー
 ```
 
 ## 開発環境での動作確認
