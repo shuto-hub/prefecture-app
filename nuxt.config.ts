@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from 'nuxt/config';
+import BasicAuth from 'nuxt-basic-authentication-module';
+
 export default defineNuxtConfig({
   srcDir: 'src/',
   ssr: false,
@@ -13,5 +16,11 @@ export default defineNuxtConfig({
     public: {
       key: '',
     },
+    basicAuth: {
+      pairs: {
+        admin: process.env.BASIC_AUTH_PASS,
+      },
+    },
   },
+  modules: [[BasicAuth, { enabled: true }]],
 });
