@@ -1,3 +1,5 @@
+import { QueryObject } from 'ufo';
+
 // RESAS APIのエンドポイントをまとめる
 const runtimeConfig = useRuntimeConfig();
 const BASE_URL = 'https://opendata.resas-portal.go.jp';
@@ -28,6 +30,6 @@ const getPrefectureList = async () => {
 };
 
 // 人口構成一覧
-const getPopulationList = async (param: any) => {
+const getPopulationList = async (param: QueryObject) => {
   return await getApi('/api/v1/population/composition/perYear', param);
 };

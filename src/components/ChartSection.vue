@@ -1,27 +1,53 @@
 <template>
   <section class="chart-card">
     <div class="type">
-      <label v-for="(label, index) in labelList" :key="index" class="chart-radio" :for="label">
+      <label
+        v-for="(label, index) in labelList"
+        :key="index"
+        class="chart-radio"
+        :for="label"
+      >
         {{ label }}
-        <input :id="label" v-model="selectedLabel" type="radio" :value="label" />
+        <input
+          :id="label"
+          v-model="selectedLabel"
+          type="radio"
+          :value="label"
+        />
       </label>
     </div>
-    <apexchart width="100%" type="line" height="400" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      width="100%"
+      type="line"
+      height="400"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </section>
 </template>
 <script lang="ts" setup>
+import {
+  PopulationForChart,
+  Population,
+  PopulationYearAndValue,
+  Prefecture,
+} from '~/composables/state';
 const prefectureState = usePrefecture();
 const populationState = useChart();
 const api = useResasApi();
 const selectedLabel = ref('総人口');
 const labelList = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
-const findPopulation = (population: any) => {
-  if (!population || !population.data || population.data.length === 0)
-    return [];
-  const prefecture = population.data.find(
-    (obj: any) => obj.label === selectedLabel.value
+const findPopulation = (populationForChart: PopulationForChart) => {
+  if (
+    !populationForChart ||
+    !populationForChart.data ||
+    populationForChart.data.length === 0
+  )
+    return;
+  const population = populationForChart.data.find(
+    (population: Population) => population.label === selectedLabel.value
   );
-  return prefecture;
+  return population;
 };
 const series = ref([
   {
@@ -52,28 +78,35 @@ const chartOptions = ref({
   },
 });
 /**
- * チェックした都道府県の人口構成を1データずつ整形し、グラフにセットする
+ * チェックした都道府県の人口構成を1データずつ整形し、チャートにセットする
  */
 const setPopulationToSeries = () => {
-  series.value = populationState.list.value.map((population: any) => ({
-    name: prefectureState.list.value.find(
-      (prefecture: any) => prefecture.prefCode === population.id
-    ).prefName,
-    id: population.id,
-    data: findPopulation(population)
-      ? findPopulation(population).data.map((obj: any) => obj.value)
-      : [],
-  }));
+  series.value = populationState.list.value.map(
+    (population: PopulationForChart) => ({
+      name: prefectureState.list.value.find(
+        (prefecture: Prefecture) => prefecture.prefCode === population.id
+      ).prefName,
+      id: population.id,
+      data: findPopulation(population)
+        ? findPopulation(population).data.map(
+            (populationYearAndValue: PopulationYearAndValue) =>
+              populationYearAndValue.value
+          )
+        : [],
+    })
+  );
 };
 watch(
   prefectureState.checkedPrefecture,
   async (newCheck: Array<number>, oldCheck: Array<number>) => {
     if (oldCheck && newCheck.length < oldCheck.length) {
-      populationState.list.value.forEach((population: any, index: number) => {
-        if (!newCheck.includes(population.id)) {
-          populationState.splicePopulation(index);
+      populationState.list.value.forEach(
+        (populationForChart: PopulationForChart, index: number) => {
+          if (!newCheck.includes(populationForChart.id)) {
+            populationState.splicePopulation(index);
+          }
         }
-      });
+      );
     } else {
       populationState.pushPopulation({
         id: newCheck[newCheck.length - 1],
@@ -88,7 +121,8 @@ watch(
       xaxis: {
         categories: findPopulation(populationState.list.value[0])
           ? findPopulation(populationState.list.value[0]).data.map(
-              (obj: any) => obj.year
+              (populationYearAndValue: PopulationYearAndValue) =>
+                populationYearAndValue.year
             )
           : [],
         title: {
