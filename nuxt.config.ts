@@ -22,5 +22,8 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: [[BasicAuth, { enabled: true }], 'nuxt-lodash'],
+  modules: [
+    [BasicAuth, { enabled: process.env.IS_PROD === '1' }],
+    'nuxt-lodash',
+  ],
 });

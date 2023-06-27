@@ -46,6 +46,7 @@
   </section>
 </template>
 <script lang="ts" setup>
+import {usePrefecture} from '~/composables/state';
 const prefectureState = usePrefecture();
 const checkedPrefecture = prefectureState.checkedPrefecture;
 const api = useResasApi();
