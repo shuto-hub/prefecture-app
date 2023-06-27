@@ -1,54 +1,64 @@
 <template>
-  <div>
+  <section>
     <div class="prefecture-card">
       <label
-        v-for="(prefecture, index) in prefectureList"
+        v-for="(prefecture, index) in prefectureState.list.value"
         :key="index"
         class="prefecture-check"
         :class="{
-          'prefecture-checked': checkedPrefecture.includes(prefecture.prefName),
+          'prefecture-checked': checkedPrefecture.includes(prefecture.prefCode),
         }"
         :for="prefecture.prefName"
       >
         {{ prefecture.prefName }}
         <input
-          type="checkbox"
           :id="prefecture.prefName"
-          :value="prefecture.prefName"
           v-model="checkedPrefecture"
+          type="checkbox"
+          :value="prefecture.prefCode"
         />
       </label>
     </div>
     <div class="sp-clear">
+      <span>※都道府県をタップするとチェックが外れます</span>
       <div class="scroll">
-        <p
-          v-for="(prefecture, index) in checkedPrefecture"
-          :key="`checked-${index}`"
-          @click="removePrefecture(prefecture)"
+        <label
+          v-for="(prefecture, index) in prefectureOnlyChecked"
+          :key="index"
+          class="prefecture-check"
+          :class="{
+            'prefecture-checked': checkedPrefecture.includes(
+              prefecture.prefCode
+            ),
+          }"
+          :for="prefecture.prefName"
         >
-          ✖️{{ prefecture }}
-        </p>
+          × {{ prefecture.prefName }}
+          <input
+            :id="prefecture.prefName"
+            v-model="checkedPrefecture"
+            type="checkbox"
+            :value="prefecture.prefCode"
+          />
+        </label>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 <script lang="ts" setup>
-const checkedPrefecture = ref([]);
-const prefectureList = ref([]);
+const prefectureState = usePrefecture();
+const checkedPrefecture = prefectureState.checkedPrefecture;
 const api = useResasApi();
-/**
- * SP用削除ボタン
- * タップした都道府県を削除する
- */
-const removePrefecture = (value: string) => {
-  const index = checkedPrefecture.value.findIndex(
-    (prefecture: string) => prefecture === value
+
+const prefectureOnlyChecked = computed(() => {
+  if (!checkedPrefecture.value) return;
+  return prefectureState.list.value.filter((prefecture) =>
+    checkedPrefecture.value.includes(prefecture.prefCode)
   );
-  checkedPrefecture.value.splice(index, 1);
-};
+});
 
 onMounted(async () => {
-  prefectureList.value = await api.getPrefecture;
+  prefectureState.setPrefecture(await api.getPrefecture);
 });
 </script>
 
@@ -86,9 +96,14 @@ onMounted(async () => {
   background: #ffffff;
   width: 100%;
   overflow-x: scroll;
-  height: 37px;
+  height: 54px;
+  > span {
+    font-size: 8px;
+    color: #aaa;
+    position: fixed;
+  }
   > .scroll {
-    padding: 6px 0;
+    padding: 16px 4px;
     gap: 10px;
     display: flex;
     width: max-content;
