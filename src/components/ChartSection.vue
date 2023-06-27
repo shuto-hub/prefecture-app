@@ -1,28 +1,12 @@
 <template>
   <section class="chart-card">
     <div class="type">
-      <label
-        v-for="(label, index) in labelList"
-        :key="index"
-        class="chart-radio"
-        :for="label"
-      >
+      <label v-for="(label, index) in labelList" :key="index" class="chart-radio" :for="label">
         {{ label }}
-        <input
-          :id="label"
-          v-model="selectedLabel"
-          type="radio"
-          :value="label"
-        />
+        <input :id="label" v-model="selectedLabel" type="radio" :value="label" />
       </label>
     </div>
-    <apexchart
-      width="100%"
-      type="line"
-      height="400"
-      :options="chartOptions"
-      :series="series"
-    ></apexchart>
+    <apexchart width="100%" type="line" height="400" :options="chartOptions" :series="series"></apexchart>
   </section>
 </template>
 <script lang="ts" setup>
@@ -96,42 +80,50 @@ const setPopulationToSeries = () => {
     })
   );
 };
+const updatePopulation = async (
+  newCheck: Array<number>,
+  oldCheck: Array<number>
+) => {
+  if (oldCheck && newCheck.length < oldCheck.length) {
+    populationState.list.value.forEach(
+      (populationForChart: PopulationForChart, index: number) => {
+        if (!newCheck.includes(populationForChart.id)) {
+          populationState.splicePopulation(index);
+        }
+      }
+    );
+  } else {
+    populationState.pushPopulation({
+      id: newCheck[newCheck.length - 1],
+      ...(await api.getPopulationList({
+        prefCode: newCheck[newCheck.length - 1],
+      })),
+    });
+  }
+  setPopulationToSeries();
+  chartOptions.value = {
+    ...chartOptions.value,
+    xaxis: {
+      categories: findPopulation(populationState.list.value[0])
+        ? findPopulation(populationState.list.value[0]).data.map(
+            (populationYearAndValue: PopulationYearAndValue) =>
+              populationYearAndValue.year
+          )
+        : [],
+      title: {
+        text: '年',
+      },
+    },
+  };
+};
 watch(
   prefectureState.checkedPrefecture,
-  async (newCheck: Array<number>, oldCheck: Array<number>) => {
-    if (oldCheck && newCheck.length < oldCheck.length) {
-      populationState.list.value.forEach(
-        (populationForChart: PopulationForChart, index: number) => {
-          if (!newCheck.includes(populationForChart.id)) {
-            populationState.splicePopulation(index);
-          }
-        }
-      );
-    } else {
-      populationState.pushPopulation({
-        id: newCheck[newCheck.length - 1],
-        ...(await api.getPopulationList({
-          prefCode: newCheck[newCheck.length - 1],
-        })),
-      });
-    }
-    setPopulationToSeries();
-    chartOptions.value = {
-      ...chartOptions.value,
-      xaxis: {
-        categories: findPopulation(populationState.list.value[0])
-          ? findPopulation(populationState.list.value[0]).data.map(
-              (populationYearAndValue: PopulationYearAndValue) =>
-                populationYearAndValue.year
-            )
-          : [],
-        title: {
-          text: '年',
-        },
-      },
-    };
-  }
+  // 秒間リクエストに制限があるため、debounceをかける
+  useDebounce(async (newCheck: Array<number>, oldCheck: Array<number>) => {
+    updatePopulation(newCheck, oldCheck);
+  }, 300)
 );
+
 watch(selectedLabel, () => {
   setPopulationToSeries();
 });

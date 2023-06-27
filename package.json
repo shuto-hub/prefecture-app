@@ -28,6 +28,7 @@
   "dependencies": {
     "apexcharts": "^3.41.0",
     "nuxt-basic-authentication-module": "^0.2.1",
+    "nuxt-lodash": "^2.5.0",
     "vue3-apexcharts": "^1.4.1"
   }
 }
