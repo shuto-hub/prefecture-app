@@ -96,42 +96,50 @@ const setPopulationToSeries = () => {
     })
   );
 };
+const updatePopulation = async (
+  newCheck: Array<number>,
+  oldCheck: Array<number>
+) => {
+  if (oldCheck && newCheck.length < oldCheck.length) {
+    populationState.list.value.forEach(
+      (populationForChart: PopulationForChart, index: number) => {
+        if (!newCheck.includes(populationForChart.id)) {
+          populationState.splicePopulation(index);
+        }
+      }
+    );
+  } else {
+    populationState.pushPopulation({
+      id: newCheck[newCheck.length - 1],
+      ...(await api.getPopulationList({
+        prefCode: newCheck[newCheck.length - 1],
+      })),
+    });
+  }
+  setPopulationToSeries();
+  chartOptions.value = {
+    ...chartOptions.value,
+    xaxis: {
+      categories: findPopulation(populationState.list.value[0])
+        ? findPopulation(populationState.list.value[0]).data.map(
+            (populationYearAndValue: PopulationYearAndValue) =>
+              populationYearAndValue.year
+          )
+        : [],
+      title: {
+        text: '年',
+      },
+    },
+  };
+};
 watch(
   prefectureState.checkedPrefecture,
-  async (newCheck: Array<number>, oldCheck: Array<number>) => {
-    if (oldCheck && newCheck.length < oldCheck.length) {
-      populationState.list.value.forEach(
-        (populationForChart: PopulationForChart, index: number) => {
-          if (!newCheck.includes(populationForChart.id)) {
-            populationState.splicePopulation(index);
-          }
-        }
-      );
-    } else {
-      populationState.pushPopulation({
-        id: newCheck[newCheck.length - 1],
-        ...(await api.getPopulationList({
-          prefCode: newCheck[newCheck.length - 1],
-        })),
-      });
-    }
-    setPopulationToSeries();
-    chartOptions.value = {
-      ...chartOptions.value,
-      xaxis: {
-        categories: findPopulation(populationState.list.value[0])
-          ? findPopulation(populationState.list.value[0]).data.map(
-              (populationYearAndValue: PopulationYearAndValue) =>
-                populationYearAndValue.year
-            )
-          : [],
-        title: {
-          text: '年',
-        },
-      },
-    };
-  }
+  // 秒間リクエストに制限があるため、debounceをかける
+  useDebounce(async (newCheck: Array<number>, oldCheck: Array<number>) => {
+    await updatePopulation(newCheck, oldCheck);
+  }, 200)
 );
+
 watch(selectedLabel, () => {
   setPopulationToSeries();
 });
