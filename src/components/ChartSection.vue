@@ -1,12 +1,28 @@
 <template>
   <section class="chart-card">
     <div class="type">
-      <label v-for="(label, index) in labelList" :key="index" class="chart-radio" :for="label">
+      <label
+        v-for="(label, index) in labelList"
+        :key="index"
+        class="chart-radio"
+        :for="label"
+      >
         {{ label }}
-        <input :id="label" v-model="selectedLabel" type="radio" :value="label" />
+        <input
+          :id="label"
+          v-model="selectedLabel"
+          type="radio"
+          :value="label"
+        />
       </label>
     </div>
-    <apexchart width="100%" type="line" height="400" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      width="100%"
+      type="line"
+      height="400"
+      :options="chartOptions"
+      :series="series"
+    ></apexchart>
   </section>
 </template>
 <script lang="ts" setup>
@@ -120,8 +136,8 @@ watch(
   prefectureState.checkedPrefecture,
   // 秒間リクエストに制限があるため、debounceをかける
   useDebounce(async (newCheck: Array<number>, oldCheck: Array<number>) => {
-    updatePopulation(newCheck, oldCheck);
-  }, 300)
+    await updatePopulation(newCheck, oldCheck);
+  }, 200)
 );
 
 watch(selectedLabel, () => {
