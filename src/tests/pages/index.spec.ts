@@ -20,9 +20,9 @@ test.describe('index', () => {
     await expect(page.locator('h1')).toBeVisible();
     // 都道府県のチェックボックスをクリック
     await page.locator('text=東京都').click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.locator('text=大阪府').click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     // 複数選択した場合表示される要素が取得できること
     const series = page.locator('.apexcharts-legend-series');
     // 「東京都」「大阪府」で2件取得できていること

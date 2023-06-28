@@ -20,7 +20,7 @@ export interface PopulationForChart {
   boundaryYear: number;
   data: Population[];
 }
-export const useChart = () => {
+export const usePopulation = () => {
   const list = useState('population', () => []);
   const pushPopulation = (population: PopulationForChart) => {
     list.value.push(population);
@@ -41,5 +41,12 @@ export const usePrefecture = () => {
   const setPrefecture = (prefecture: Prefecture[]) => {
     list.value = prefecture;
   };
-  return { list, checkedPrefecture, setPrefecture };
+  // チェックされている都道府県のリストを返す
+  const prefectureOnlyChecked = computed(() => {
+    if (!checkedPrefecture.value) return;
+    return list.value.filter((prefecture) =>
+      checkedPrefecture.value.includes(prefecture.prefCode)
+    );
+  });
+  return { list, checkedPrefecture, setPrefecture, prefectureOnlyChecked };
 };

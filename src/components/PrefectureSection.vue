@@ -6,14 +6,17 @@
         :key="index"
         class="prefecture-check"
         :class="{
-          'prefecture-checked': checkedPrefecture.includes(prefecture.prefCode),
+          'prefecture-checked':
+            prefectureState.checkedPrefecture.value.includes(
+              prefecture.prefCode
+            ),
         }"
         :for="prefecture.prefName"
       >
         {{ prefecture.prefName }}
         <input
           :id="prefecture.prefName"
-          v-model="checkedPrefecture"
+          v-model="prefectureState.checkedPrefecture.value"
           type="checkbox"
           :value="prefecture.prefCode"
         />
@@ -23,20 +26,22 @@
       <span>※都道府県をタップするとチェックが外れます</span>
       <div class="scroll">
         <label
-          v-for="(prefecture, index) in prefectureOnlyChecked"
+          v-for="(prefecture, index) in prefectureState.prefectureOnlyChecked
+            .value"
           :key="index"
           class="prefecture-check"
           :class="{
-            'prefecture-checked': checkedPrefecture.includes(
-              prefecture.prefCode
-            ),
+            'prefecture-checked':
+              prefectureState.checkedPrefecture.value.includes(
+                prefecture.prefCode
+              ),
           }"
           :for="prefecture.prefName"
         >
           × {{ prefecture.prefName }}
           <input
             :id="prefecture.prefName"
-            v-model="checkedPrefecture"
+            v-model="prefectureState.checkedPrefecture.value"
             type="checkbox"
             :value="prefecture.prefCode"
           />
@@ -47,15 +52,7 @@
 </template>
 <script lang="ts" setup>
 const prefectureState = usePrefecture();
-const checkedPrefecture = prefectureState.checkedPrefecture;
 const api = useResasApi();
-
-const prefectureOnlyChecked = computed(() => {
-  if (!checkedPrefecture.value) return;
-  return prefectureState.list.value.filter((prefecture) =>
-    checkedPrefecture.value.includes(prefecture.prefCode)
-  );
-});
 
 onMounted(async () => {
   prefectureState.setPrefecture(await api.getPrefecture);
