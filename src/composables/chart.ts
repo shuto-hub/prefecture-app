@@ -87,7 +87,7 @@ export const useChartUtils = () => {
       },
     };
   };
-  
+
   // チェックした都道府県の人口構成を1データずつ整形し、チャートにセットする
   const setPopulationToSeries = () => {
     series.value = populationState.list.value.map(

@@ -6,7 +6,10 @@
         :key="index"
         class="prefecture-check"
         :class="{
-          'prefecture-checked': prefectureState.checkedPrefecture.value.includes(prefecture.prefCode),
+          'prefecture-checked':
+            prefectureState.checkedPrefecture.value.includes(
+              prefecture.prefCode
+            ),
         }"
         :for="prefecture.prefName"
       >
@@ -23,13 +26,15 @@
       <span>※都道府県をタップするとチェックが外れます</span>
       <div class="scroll">
         <label
-          v-for="(prefecture, index) in prefectureState.prefectureOnlyChecked.value"
+          v-for="(prefecture, index) in prefectureState.prefectureOnlyChecked
+            .value"
           :key="index"
           class="prefecture-check"
           :class="{
-            'prefecture-checked': prefectureState.checkedPrefecture.value.includes(
-              prefecture.prefCode
-            ),
+            'prefecture-checked':
+              prefectureState.checkedPrefecture.value.includes(
+                prefecture.prefCode
+              ),
           }"
           :for="prefecture.prefName"
         >
