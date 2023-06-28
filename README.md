@@ -10,9 +10,6 @@
 # npm
 npm install
 
-# pnpm
-pnpm install
-
 # yarn
 yarn install
 ```
@@ -33,9 +30,20 @@ NUXT_PUBLIC_KEY=作成したAPIキー
 # npm
 npm run dev
 
-# pnpm
-pnpm run dev
-
 # yarn
 yarn dev
+```
+
+## E2Eテストの実行方法
+
+1. テスト用にプロジェクトをビルドするため、ルートディレクトリで以下のコマンドを実行してください。
+
+```
+TEST=true yarn run nuxt build
+```
+
+2. ルートディレクトリで以下のコマンドを実行することでテストを実行できます。
+
+```
+yarn run playwright test
 ```
