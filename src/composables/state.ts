@@ -41,6 +41,7 @@ export const usePrefecture = () => {
   const setPrefecture = (prefecture: Prefecture[]) => {
     list.value = prefecture;
   };
+  // チェックされている都道府県のリストを返す
   const prefectureOnlyChecked = computed(() => {
     if (!checkedPrefecture.value) return;
     return list.value.filter((prefecture) =>
