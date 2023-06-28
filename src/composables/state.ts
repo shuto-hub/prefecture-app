@@ -20,7 +20,7 @@ export interface PopulationForChart {
   boundaryYear: number;
   data: Population[];
 }
-export const useChart = () => {
+export const usePopulation = () => {
   const list = useState('population', () => []);
   const pushPopulation = (population: PopulationForChart) => {
     list.value.push(population);
