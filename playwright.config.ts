@@ -5,8 +5,8 @@ dotenv.config({
   path: path.resolve(__dirname, '.', `.env.${process.env.TARGET}`),
 });
 const config: PlaywrightTestConfig = {
-  snapshotDir: './snapshots/e2e',
   testDir: './src/tests',
+  reporter: [['json', {  outputFile: 'test-results/test-results.json' }]],
   webServer: {
     command: 'PORT=4000 node ./.output/server/index.mjs',
     port: 4000,
