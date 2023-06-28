@@ -41,5 +41,11 @@ export const usePrefecture = () => {
   const setPrefecture = (prefecture: Prefecture[]) => {
     list.value = prefecture;
   };
-  return { list, checkedPrefecture, setPrefecture };
+  const prefectureOnlyChecked = computed(() => {
+    if (!checkedPrefecture.value) return;
+    return list.value.filter((prefecture) =>
+      checkedPrefecture.value.includes(prefecture.prefCode)
+    );
+  });
+  return { list, checkedPrefecture, setPrefecture, prefectureOnlyChecked };
 };
