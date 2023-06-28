@@ -10,9 +10,6 @@
 # npm
 npm install
 
-# pnpm
-pnpm install
-
 # yarn
 yarn install
 ```
@@ -27,15 +24,36 @@ NUXT_PUBLIC_KEY=作成したAPIキー
 
 ## 開発環境での動作確認
 
-ルートディレクトリで以下のコマンドを実行し、 `http://localhost:3000`から動作を確認できます:
+1. Basic認証を導入しているため、`.env`ファイルに`BASIC_AUTH_PASS`を任意の値で追加してください。
+
+例：
+```
+NUXT_PUBLIC_KEY=作成したAPIキー
+BASIC_AUTH_PASS="admin"
+```
+
+※設定後、"user: admin, pass: BASIC_AUTH_PASSのvalue"でアクセス可能になります。
+
+2. ルートディレクトリで以下のコマンドを実行し、 `http://localhost:3000`から動作を確認できます:
 
 ```bash
 # npm
 npm run dev
 
-# pnpm
-pnpm run dev
-
 # yarn
 yarn dev
+```
+
+## E2Eテストの実行方法
+
+1. テスト用にプロジェクトをビルドするため、ルートディレクトリで以下のコマンドを実行してください。
+
+```
+TEST=true yarn run nuxt build
+```
+
+2. ルートディレクトリで以下のコマンドを実行することでテストを実行できます。
+
+```
+yarn run playwright test
 ```
