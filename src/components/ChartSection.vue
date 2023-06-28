@@ -35,8 +35,9 @@ import {
 const prefectureState = usePrefecture();
 const populationState = useChart();
 const api = useResasApi();
-const selectedLabel = ref('総人口');
-const labelList = ['総人口', '年少人口', '生産年齢人口', '老年人口'];
+const chartUtils = useChartUtils();
+const labelList = chartUtils.labelList;
+const selectedLabel = ref(labelList[0]); // 総人口
 const findPopulation = (populationForChart: PopulationForChart) => {
   if (
     !populationForChart ||
@@ -49,34 +50,8 @@ const findPopulation = (populationForChart: PopulationForChart) => {
   );
   return population;
 };
-const series = ref([
-  {
-    name: '',
-    data: [],
-  },
-]);
-const chartOptions = ref({
-  chart: {
-    type: 'line',
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 10,
-      borderRadiusApplication: 'around',
-    },
-  },
-  yaxis: {
-    title: {
-      text: '万人',
-    },
-  },
-  xaxis: {
-    categories: [],
-    title: {
-      text: '年',
-    },
-  },
-});
+const series = ref(chartUtils.initializeSeries());
+const chartOptions = ref(chartUtils.initializeOptions());
 /**
  * チェックした都道府県の人口構成を1データずつ整形し、チャートにセットする
  */
